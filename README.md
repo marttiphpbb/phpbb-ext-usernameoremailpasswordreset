@@ -38,4 +38,4 @@ You can install this on the latest release of phpBB 3.2 by following the steps b
 
 ## Screenshot
 
-[Password reset](doc/emailonly.png)
+![Password reset](doc/emailonly.png)
