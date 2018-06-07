@@ -2,9 +2,9 @@
 
 [Topic on phpBB.com]()
 
-By default in a phpBB board you need to provide both username and email to reset your password. With this extension enabled you need only to give the email address.
+By default in a phpBB board you need to provide both username and email to reset your password. With this extension enabled you need only to give your email address.
 
-Only users with a unique email address in the database will be able to have send a new password. It is recommanded to check beforehand if all email addresses are unique. When you left the configuration option "Allow email address re-use" in the ACP (General > Board configuration > User registration settings) to the default "false" in your board, this will be the case.
+Only users with a unique email address in the database will be able to have sent a new password. It is recommanded to check beforehand if all email addresses are unique. When you left the configuration option "Allow email address re-use" in the ACP (General > Board configuration > User registration settings) to the default "false" in your board, this will be the case.
 
 ## Requirements
 

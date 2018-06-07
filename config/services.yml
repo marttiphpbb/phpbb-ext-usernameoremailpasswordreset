@@ -3,9 +3,10 @@ services:
         class: marttiphpbb\emailonlypasswordreset\event\listener
         arguments:
             - '@dbal.conn'
-            - '@request'
-            - '@user'
             - '@language'
+            - '@template'
+            - '%core.root_path%'
+            - '%core.php_ext%'
         tags:
             - { name: event.listener }
 
