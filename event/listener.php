@@ -9,14 +9,17 @@ namespace marttiphpbb\emailonlypasswordreset\event;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use phpbb\event\data as event;
+use phpbb\db\driver\factory as db;
 use phpbb\request\request;
 use phpbb\template\template;
-use phpbb\language\language;
 use phpbb\user;
-use phpbb\config\config;
+use phpbb\language\language;
 
 class listener implements EventSubscriberInterface
 {
+	/** @var db */
+	protected $db;
+
 	/** @var request */
 	protected $request;
 
@@ -29,97 +32,68 @@ class listener implements EventSubscriberInterface
 	/** @var language */
 	protected $language;
 
-	/** @var config */
-	protected $config;
-
-	/** @var bool */
-	protected $admin;
-
 	/**
 	 * @param request $request
 	*/
 	public function __construct(
+		db $db,
 		request $request,
 		user $user,
-		template $template,
-		language $language,
-		config $config
+		language $language
 	)
 	{
+		$this->db = $db;
 		$this->request = $request;
 		$this->user = $user;
-		$this->template = $template;
 		$this->language = $language;
-		$this->config = $config;
 	}
 
 	static public function getSubscribedEvents()
 	{
 		return [
-			'core.index_modify_page_title' => 'core_index_modify_page_title',
-			'core.login_box_before'	=> 'core_login_box_before',
-			'core.login_box_failed'	=> 'core_login_box_failed',
+			'core.index_modify_page_title' 
+				=> 'core_index_modify_page_title',
+			'core.ucp_remind_modify_select_sql'
+				=> 'core_ucp_remind_modify_select_sql',
+			'core.twig_environment_render_template_before'
+				=> 'core_twig_environment_render_template_before',
 		];
-	}
-
-	public function core_login_box_before(event $event)
-	{
-		$admin = $event['admin'];
-
-		if ($admin)
-		{
-			$this->admin = true;
-			return;
-		}
-	
-		$this->language->add_lang('error', 'marttiphpbb/emailonlypasswordreset');
-
-		$this->login_input_page();
-	}
-
-	public function is_admin_login()
-	{
-		return $this->admin;
 	}
 
 	public function core_index_modify_page_title(event $event)
 	{
-		if ($this->user->data['user_id'] != ANONYMOUS)
-		{
-			return;
-		}
-
-		$this->login_input_page();
+		
 	}
 
-	protected function login_input_page()
+	public function core_ucp_remind_modify_select_sql(event $event)
 	{
-		$auth_method = $this->config['auth_method'];
+		$sql_array = $event['sql_array'];
+		$email = $event['email'];
+		
+		$sql_array['WHERE'] = 'user_email_hash = \'';
+		$sql_array['WHERE'] .= $this->db->sql_escape(phpbb_email_hash($email));
+		$sql_array['WHERE'] .= '\'';
 
-		if (!in_array($auth_method, ['db_username_or_email', 'db_email']))
+		// The user is fetched here only to provide an alternative error message
+		// when not found.
+		$sql = $this->db->sql_build_query('SELECT', $sql_array);
+		$result = $this->db->sql_query($sql);
+		$user_row = $this->db->sql_fetchrow($result);
+		$this->db->sql_freeresult($result);
+
+		if (!$user_row)
 		{
-			return;
-		}
+			$this->language->add_lang('error', 'marttiphpbb/emailonlypasswordreset');
+			trigger_error('MARTTIPHPBB_EMAILONLYPASSWORDRESET_NO_EMAIL_USER');
+		}		
 
-		error_log($auth_method);
-
-		$this->language->add_lang('login', 'marttiphpbb/emailonlypasswordreset');
-
-		$this->template->assign_vars([
-			'PROVIDER_TEMPLATE_FILE'		=> '@marttiphpbb_emailonlypasswordreset/loginbox.html',
-			'MARTTIPHPBB_EMAILONLYPASSWORDRESET_AUTH' 	=> $auth_method,
-		]);
+		$event['sql_array'] = $sql_array;
 	}
 
-	public function core_login_box_failed(event $event)
+	public function core_twig_environment_render_template_before(event $event)
 	{
-		$err = $event['err'];
-		$result = $event['result'];
+		$context = $event['context'];
 
-		if (isset($result['marttiphpbb_emailonlypasswordreset_err_sprintf']))
-		{
-			$err = vsprintf($err, $result['marttiphpbb_emailonlypasswordreset_err_sprintf']);
-			$event['err'] = $err;
-		}
+		error_log(json_encode($context));
 	}
 }
