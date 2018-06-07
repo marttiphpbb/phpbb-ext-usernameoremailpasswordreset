@@ -1,11 +1,11 @@
 {
 	"name": "marttiphpbb/emailonlypasswordreset",
 	"type": "phpbb-extension",
-	"description": "phpBB 3.2 extension to provide login with email",
+	"description": "phpBB 3.2 extension to reset password with only the email address",
 	"homepage": "https://github.com/marttiphpbb/phpbb-ext-emailonlypasswordreset",
 	"version": "0.1.0",
-	"time": "2018-05-02",
-	"keywords": ["phpbb", "extension", "email", "login"],
+	"time": "2018-06-07",
+	"keywords": ["phpbb", "extension", "email", "password"],
 	"license": "GPL-2.0",
 	"authors": [{
 			"name": "martti",
