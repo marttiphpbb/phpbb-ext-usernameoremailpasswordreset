@@ -1,6 +1,6 @@
 # phpBB Extension - marttiphpbb Email Only Password Reset
 
-[Topic on phpBB.com]()
+[Topic on phpBB.com](https://www.phpbb.com/community/viewtopic.php?f=456&t=2474846)
 
 By default in a phpBB board you need to provide both username and email to reset your password. With this extension enabled you need only to give your email address.
 
