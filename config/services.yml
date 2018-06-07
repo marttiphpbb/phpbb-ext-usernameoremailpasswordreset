@@ -1,0 +1,47 @@
+services:
+    auth.provider.db_email:
+        class: marttiphpbb\emailonlypasswordreset\auth\email
+        arguments:
+            - '@dbal.conn'
+            - '@config'
+            - '@passwords.manager'
+            - '@request'
+            - '@user'
+            - '@service_container'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+        tags:
+            - { name: auth.provider }
+
+    auth.provider.db_username_or_email:
+        class: marttiphpbb\emailonlypasswordreset\auth\username_or_email
+        arguments:
+            - '@dbal.conn'
+            - '@config'
+            - '@passwords.manager'
+            - '@request'
+            - '@user'
+            - '@service_container'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+        tags:
+            - { name: auth.provider }
+
+    marttiphpbb.emailonlypasswordreset.listener:
+        class: marttiphpbb\emailonlypasswordreset\event\listener
+        arguments:
+            - '@request'
+            - '@user'
+            - '@template'
+            - '@language'
+            - '@config'
+        tags:
+            - { name: event.listener }
+
+    marttiphpbb.emailonlypasswordreset.console.info:
+        class: marttiphpbb\emailonlypasswordreset\console\info
+        arguments:   
+            - '@user'
+            - '@dbal.conn'
+        tags:
+            - { name: console.command }            

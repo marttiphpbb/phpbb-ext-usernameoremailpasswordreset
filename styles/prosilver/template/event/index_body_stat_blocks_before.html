@@ -1,0 +1,11 @@
+{%- if MARTTIPHPBB_EMAILONLYPASSWORDRESET_AUTH and not S_USER_LOGGED_IN and not S_IS_BOT -%}  
+    {%- INCLUDEJS '@marttiphpbb_emailonlypasswordreset/js/quicklogin.js' -%}
+    <span class="hidden" id="marttiphpbb_emailonlypasswordreset" data-auth-method="{{- MARTTIPHPBB_EMAILONLYPASSWORDRESET_AUTH -}}">
+        {%- if MARTTIPHPBB_EMAILONLYPASSWORDRESET_AUTH == 'db_email' -%}    
+            {{- lang('MARTTIPHPBB_EMAILONLYPASSWORDRESET_EMAIL') -}}
+        {%- else -%}
+            {{- lang('MARTTIPHPBB_EMAILONLYPASSWORDRESET_USERNAME_OR_EMAIL') -}}
+        {%- endif -%}
+        {{- lang('COLON') -}}
+    </span>
+{%- endif -%}
