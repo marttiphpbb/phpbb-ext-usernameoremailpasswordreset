@@ -1,10 +1,10 @@
 {
-	"name": "marttiphpbb/emailonlypasswordreset",
+	"name": "marttiphpbb/usernameoremailpasswordreset",
 	"type": "phpbb-extension",
-	"description": "phpBB 3.2 extension to reset password with only the email address",
-	"homepage": "https://github.com/marttiphpbb/phpbb-ext-emailonlypasswordreset",
+	"description": "phpBB 3.2 extension to reset password with username OR the email address",
+	"homepage": "https://github.com/marttiphpbb/phpbb-ext-usernameoremailpasswordreset",
 	"version": "0.1.0",
-	"time": "2018-06-07",
+	"time": "2018-06-08",
 	"keywords": ["phpbb", "extension", "email", "password"],
 	"license": "GPL-2.0",
 	"authors": [{
@@ -19,14 +19,14 @@
 	"require-dev": {
 	},
 	"extra": {
-		"display-name": "Email Only Password Reset",
+		"display-name": "Username Or Email Password Reset",
 		"soft-require": {
 			"phpbb/phpbb": ">=3.2.0"
 		},
 		"version-check": {
 			"host": "marttiphpbb.github.io",
 			"directory": "/version",
-			"filename": "emailonlypasswordreset.json"
+			"filename": "usernameoremailpasswordreset.json"
 		}
 	}
 }

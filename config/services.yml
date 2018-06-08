@@ -1,6 +1,6 @@
 services:
-    marttiphpbb.emailonlypasswordreset.listener:
-        class: marttiphpbb\emailonlypasswordreset\event\listener
+    marttiphpbb.usernameoremailpasswordreset.listener:
+        class: marttiphpbb\usernameoremailpasswordreset\event\listener
         arguments:
             - '@dbal.conn'
             - '@language'
@@ -10,8 +10,8 @@ services:
         tags:
             - { name: event.listener }
 
-    marttiphpbb.emailonlypasswordreset.console.info:
-        class: marttiphpbb\emailonlypasswordreset\console\info
+    marttiphpbb.usernameoremailpasswordreset.console.info:
+        class: marttiphpbb\usernameoremailpasswordreset\console\info
         arguments:   
             - '@user'
             - '@dbal.conn'

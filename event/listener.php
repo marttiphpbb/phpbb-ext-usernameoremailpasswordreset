@@ -1,11 +1,11 @@
 <?php
 /**
-* phpBB Extension - marttiphpbb emailonlypasswordreset
+* phpBB Extension - marttiphpbb usernameoremailpasswordreset
 * @copyright (c) 2018 marttiphpbb <info@martti.be>
 * @license GNU General Public License, version 2 (GPL-2.0)
 */
 
-namespace marttiphpbb\emailonlypasswordreset\event;
+namespace marttiphpbb\usernameoremailpasswordreset\event;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use phpbb\event\data as event;
@@ -72,7 +72,7 @@ class listener implements EventSubscriberInterface
 			return;
 		}
 
-		$this->template->assign_var('MARTTIPHPBB_EMAILONLYPASSWORDRESET', true);
+		$this->template->assign_var('MARTTIPHPBB_USERNAMEOREMAILPASSWORDRESET', true);
 	}
 
 	public function core_ucp_remind_modify_select_sql(event $event)
@@ -97,14 +97,14 @@ class listener implements EventSubscriberInterface
 
 		if ($count === 0)
 		{
-			$this->language->add_lang('error', 'marttiphpbb/emailonlypasswordreset');
-			trigger_error('MARTTIPHPBB_EMAILONLYPASSWORDRESET_NO_EMAIL_ERROR');
+			$this->language->add_lang('error', 'marttiphpbb/usernameoremailpasswordreset');
+			trigger_error('MARTTIPHPBB_USERNAMEOREMAILPASSWORDRESET_NO_EMAIL_ERROR');
 		}
 		
 		if ($count > 1)
 		{
-			$this->language->add_lang('error', 'marttiphpbb/emailonlypasswordreset');
-			$err = $this->language->lang('MARTTIPHPBB_EMAILONLYPASSWORDRESET_DUPLICATE_EMAIL_ERROR');
+			$this->language->add_lang('error', 'marttiphpbb/usernameoremailpasswordreset');
+			$err = $this->language->lang('MARTTIPHPBB_USERNAMEOREMAILPASSWORDRESET_DUPLICATE_EMAIL_ERROR');
 			$err = vsprintf($err, [
 				$email, 
 				'<a href="' . append_sid($this->phpbb_root_path . 'memberlist.' . $this->php_ext, 'mode=contactadmin') . '">', 
