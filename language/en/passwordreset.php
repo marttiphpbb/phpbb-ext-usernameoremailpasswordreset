@@ -18,5 +18,5 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, [
 	'MARTTIPHPBB_USERNAMEOREMAILPASSWORDRESET_EXPLAIN'
-		=> 'You only need to fill in the username OR the email, not both.',
+		=> 'You only need to fill in the username OR the email address, not both.',
 ]);
