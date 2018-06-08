@@ -1,3 +1,6 @@
 {%- if MARTTIPHPBB_USERNAMEOREMAILPASSWORDRESET -%}  
-    {%- INCLUDEJS '@marttiphpbb_usernameoremailpasswordreset/js/usernameoremailpasswordreset.js' -%}
+    {%- INCLUDEJS '@marttiphpbb_usernameoremailpasswordreset/js/passwordreset.js' -%}
+    <p id="marttiphpbb_usernameoremailpasswordreset_explain" class="hidden">
+        {{- lang('MARTTIPHPBB_USERNAMEOREMAILPASSWORDRESET_EXPLAIN') -}}
+    </p>
 {%- endif -%}

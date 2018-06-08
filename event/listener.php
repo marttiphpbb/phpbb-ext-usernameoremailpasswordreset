@@ -72,6 +72,7 @@ class listener implements EventSubscriberInterface
 			return;
 		}
 
+		$this->language->add_lang('passwordreset', 'marttiphpbb/usernameoremailpasswordreset');
 		$this->template->assign_var('MARTTIPHPBB_USERNAMEOREMAILPASSWORDRESET', true);
 	}
 
@@ -79,7 +80,22 @@ class listener implements EventSubscriberInterface
 	{
 		$sql_array = $event['sql_array'];
 		$email = $event['email'];
-		
+		$username = $event['username'];
+
+		if ($email)
+		{
+			$sql_array = $this->sql_by_email($email, $sql_array);
+		}
+		else if ($username)
+		{
+			$sql_array = $this->sql_by_username($username, $sql_array);
+		}
+
+		$event['sql_array'] = $sql_array;
+	}
+
+	private function sql_by_email(string $email, array $sql_array):array
+	{		
 		$sql_array['WHERE'] = 'user_email_hash = \'';
 		$sql_array['WHERE'] .= $this->db->sql_escape(phpbb_email_hash($email));
 		$sql_array['WHERE'] .= '\'';
@@ -93,12 +109,18 @@ class listener implements EventSubscriberInterface
 		{
 			$count++;
 		}
+	
 		$this->db->sql_freeresult($result);
 
 		if ($count === 0)
 		{
 			$this->language->add_lang('error', 'marttiphpbb/usernameoremailpasswordreset');
-			trigger_error('MARTTIPHPBB_USERNAMEOREMAILPASSWORDRESET_NO_EMAIL_ERROR');
+			$err = $this->language->lang('MARTTIPHPBB_USERNAMEOREMAILPASSWORDRESET_NO_EMAIL_ERROR');
+			$err = vsprintf($err, [
+				$email,
+			]);	
+
+			trigger_error($err);
 		}
 		
 		if ($count > 1)
@@ -106,13 +128,36 @@ class listener implements EventSubscriberInterface
 			$this->language->add_lang('error', 'marttiphpbb/usernameoremailpasswordreset');
 			$err = $this->language->lang('MARTTIPHPBB_USERNAMEOREMAILPASSWORDRESET_DUPLICATE_EMAIL_ERROR');
 			$err = vsprintf($err, [
-				$email, 
-				'<a href="' . append_sid($this->phpbb_root_path . 'memberlist.' . $this->php_ext, 'mode=contactadmin') . '">', 
-				'</a>',
+				$email,
 			]);	
 			trigger_error($err);	
 		}
 
-		$event['sql_array'] = $sql_array;
+		return $sql_array;
+	}
+
+	private function sql_by_username(string $username, array $sql_array):array
+	{		
+		$sql_array['WHERE'] = 'username_clean = \'';
+		$sql_array['WHERE'] .= $this->db->sql_escape(utf8_clean_string($username));
+		$sql_array['WHERE'] .= '\'';
+
+		$sql = $this->db->sql_build_query('SELECT', $sql_array);
+		$result = $this->db->sql_query($sql);		
+		$user_data = $this->db->sql_fetchrow($result);
+		$this->db->sql_freeresult($result);
+
+		if (!$user_data)
+		{
+			$this->language->add_lang('error', 'marttiphpbb/usernameoremailpasswordreset');
+			$err = $this->language->lang('MARTTIPHPBB_USERNAMEOREMAILPASSWORDRESET_NO_USERNAME_ERROR');
+			$err = vsprintf($err, [
+				$username,
+			]);	
+
+			trigger_error($err);
+		}
+
+		return $sql_array;
 	}
 }
