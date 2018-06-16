@@ -19,7 +19,6 @@ use phpbb\db\driver\factory as db;
 
 class info extends command
 {
-	/** @var db */
 	protected $db;
 
 	public function __construct(user $user, db $db)
@@ -38,11 +37,6 @@ class info extends command
 		;
 	}
 
-	/**
-	* @param InputInterface
-	* @param OutputInterface
-	* @return void
-	*/
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
 		$io = new SymfonyStyle($input, $output);
